@@ -34,6 +34,7 @@
      public void setMonth(int month){this.month=month;}  
      public void setDay(int day){this.day=day;}
      public String toString(){ return year+"/"+month+"/"+day;}
+ 
   }
 ```
 
