@@ -16,23 +16,25 @@
  ![icon](http://7xizte.com1.z0.glb.clouddn.com/img/video/red&white.jpg)
 
 # 代码片段：
-   public class Date
-{
-private int year,month,day;
-public Date(){
-this(2015,1,1);
-}
-public Date(int year,int month,int day){
-this.year=year; this.month=month; this.day=day;
-}
-public int getYear(){return year;}
-public int getMonth(){return month;}
-public int getDay(){return day;}
-public void setYear(int year){this.year=year;}
-public void setMonth(int month){this.month=month;}
-public void setDay(int day){this.day=day;}
-public String toString(){ return year+"/"+month+"/"+day;}
-}
-
+```java 
+   public class Date{
+    private int year,month,day;
+    public Date(){
+    this(2015,1,1);
+      }
+      
+    public Date(int year,int month,int day){
+    this.year=year; this.month=month; this.day=day;
+      }
+      
+     public int getYear(){return year;}
+     public int getMonth(){return month;}
+     public int getDay(){return day;}
+     public void setYear(int year){this.year=year;}
+     public void setMonth(int month){this.month=month;}  
+     public void setDay(int day){this.day=day;}
+     public String toString(){ return year+"/"+month+"/"+day;}
+  }
+```
 
 * 123456
