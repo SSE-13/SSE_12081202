@@ -28,12 +28,12 @@ class Bitmap extends DisplayObject {
 
 
     source;
-
+ 
     render(context: CanvasRenderingContext2D) {
 
         var image = imagePool[this.source];
         if (image) {
-            context.drawImage(image, 0, 0);
+            context.drawImage(image, 0, 0,50,50);
         }
         else {
             context.font = "20px Arial";
@@ -63,7 +63,7 @@ class TextField extends DisplayObject {
     render(context: CanvasRenderingContext2D) {
         context.font = "20px Arial";
         context.fillStyle = '#000000';
-        context.fillText('HelloWorld', 0, 20);
+        context.fillText('120', 0, 20);
     }
 }
 
@@ -104,29 +104,45 @@ var context = canvas.getContext("2d");
 
 
 var rect = new Rect();
-rect.width = 200;
-rect.height = 100;
+rect.width = 50;
+rect.height = 300;
 rect.color = '#00FF00'
-
+rect.x = 100;
+rect.y = 170;
 
 var rect2 = new Rect();
-rect2.width = 300;
-rect2.height = 50;
-rect2.x = 200;
-rect2.y = 200;
-rect2.rotation = Math.PI / 8;
-rect2.color = '#00FFFF'
+rect2.width = 50;
+rect2.height = 70;
+rect2.x = 100;
+rect2.y = 0;
+rect2.color = '#00FF00'
+
+var rect3 = new Rect();
+rect3.width = 50;
+rect3.height = 150;
+rect3.x = 300;
+rect3.y = 0;
+rect3.color = '#00FF00'
+
+var rect4 = new Rect();
+rect4.width = 50;
+rect4.height = 150;
+rect4.x = 300;
+rect4.y = 250;
+rect4.color = '#00FF00'
 
 var text = new TextField();
-text.x = 10;
-
+text.x = 200;
+text.y = 50;
 var bitmap = new Bitmap();
-bitmap.source = 'wander-icon.jpg';
+bitmap.source = 'bird.jpg';
+bitmap.x = 200;
+bitmap.y = 100;
 
 //渲染队列
-var renderQueue = [rect, rect2, text,bitmap];
+var renderQueue = [rect, rect2,rect3,rect4,text,bitmap];
 //资源加载列表
-var imageList = ['wander-icon.jpg'];
+var imageList = ['bird.jpg'];
 
 //先加载资源，加载成功之后执行渲染队列
 loadResource(imageList, function() {
