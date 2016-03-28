@@ -1,27 +1,28 @@
 var canvas: HTMLCanvasElement = document.getElementById("game") as HTMLCanvasElement;
 var context = canvas.getContext("2d");
-/**
- * 基类，负责处理x,y,rotation 等属性
- */
+
+
 module render {
 
 
+    /**
+     * 基类，负责处理x,y,rotation 等属性
+     */
     export class DisplayObject {
-        
+
         x = 0;
-        
         y = 0;
-        
         scaleX = 1;
-        
         scaleY = 1;
-        
         rotation = 0;
 
+        /**
+         * 全局矩阵
+         */
         globalMatrix: render.Matrix;
 
         parent: DisplayObject;
-
+        
         constructor() {
             this.globalMatrix = new render.Matrix();
         }
@@ -34,23 +35,53 @@ module render {
             var skewY = angle;
 
             var localMatrix = new render.Matrix();
-            localMatrix.updateFromDisplayObject(this.x, this.y, this.scaleX, this.scaleY, this.rotation);
 
+            localMatrix.updateFromDisplayObject(this.x, this.y, this.scaleX, this.scaleY, this.rotation);
+           
             if (!parent) {
                 this.globalMatrix = localMatrix;
             }
-            else {             
-                this.globalMatrix = localMatrix;
+            else {
+                //TODO:
+                // GLOBAL_MATRIX = PARENT_GLOBAL_MATRIX * LOCAL_MATRIX
+                this.globalMatrix = matrixAppendMatrix(parent.globalMatrix,localMatrix);
+
+              
+
             }
 
 
-            context.setTransform(this.globalMatrix.a,this.globalMatrix.b,this.globalMatrix.c,this.globalMatrix.d,this.globalMatrix.tx,this.globalMatrix.ty);
+            context.setTransform(
+                this.globalMatrix.a,
+                this.globalMatrix.b,
+                this.globalMatrix.c,
+                this.globalMatrix.d,
+                this.globalMatrix.tx,
+                this.globalMatrix.ty
+            );
             this.render(context);
         }
 
         render(context: CanvasRenderingContext2D) {
 
         }
+    }
+    
+    
+    function matrixAppendMatrix(m1:Matrix,m2:Matrix):Matrix{
+        
+     
+        
+        var result = new Matrix();
+        result.a = m1.a*m2.a + m1.b*m2.c;
+        result.b = m1.a*m2.b + m1.b*m2.d;
+        result.c = m2.a*m1.c + m2.c*m1.d;
+        result.d = m2.b*m1.c + m1.d*m2.d;
+        result.tx = m2.a*m1.tx + m2.c*m1.ty + m2.tx;
+        result.ty = m2.b*m1.tx + m2.d*m1.ty + m2.ty; 
+        return result;
+        
+        
     }
 
     export class DisplayObjectContainer extends DisplayObject {
@@ -67,6 +98,7 @@ module render {
             this.children.push(child);
             child.parent = this;
         }
+
 
         render(context) {
             for (var i = 0; i < this.children.length; i++) {
