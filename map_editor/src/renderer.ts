@@ -5,11 +5,16 @@ var context = canvas.getContext("2d");
 module render {
 
 
+
+
+
     /**
      * 基类，负责处理x,y,rotation 等属性
      */
     export class DisplayObject {
-
+        
+        width = 100
+        height = 100;
         x = 0;
         y = 0;
         scaleX = 1;
@@ -19,31 +24,31 @@ module render {
         /**
          * 全局矩阵
          */
-        globalMatrix: render.Matrix;
+        globalMatrix: math.Matrix;
 
         parent: DisplayObject;
 
         constructor() {
-            this.globalMatrix = new render.Matrix();
+            this.globalMatrix = new math.Matrix();
+        }
+
+        getLocalMatrix(): math.Matrix {
+            var localMatrix = new math.Matrix();
+            localMatrix.updateFromDisplayObject(this.x, this.y, this.scaleX, this.scaleY, this.rotation);
+            return localMatrix;
         }
 
         draw(context: CanvasRenderingContext2D) {
 
             var parent = this.parent;
-            var angle = this.rotation / 180 * Math.PI;
-            var skewX = angle;
-            var skewY = angle;
-
-            var localMatrix = new render.Matrix();
-            localMatrix.updateFromDisplayObject(this.x, this.y, this.scaleX, this.scaleY, this.rotation);
-
+            var localMatrix = this.getLocalMatrix();
             if (!parent) {
                 this.globalMatrix = localMatrix;
             }
             else {
                 //TODO:
                 // GLOBAL_MATRIX = PARENT_GLOBAL_MATRIX * LOCAL_MATRIX
-                this.globalMatrix = localMatrix;
+                this.globalMatrix = math.matrixAppendMatrix(localMatrix, parent.globalMatrix);
             }
 
 
@@ -106,26 +111,31 @@ module render {
 
     }
 
-    class Rect extends DisplayObject {
+    export class Rect extends DisplayObject {
 
-        width = 100
 
-        height = 100;
 
         color = '#FF0000';
 
+        strokeColor = "#000000"
+
         render(context: CanvasRenderingContext2D) {
             context.fillStyle = this.color;
-            context.fillRect(0, 0, this.width, this.height);
+            context.beginPath();
+            context.strokeStyle = this.strokeColor;
+            context.rect(0, 0, this.width, this.height);
+            context.closePath();
+            context.fill();
+            context.stroke();
         }
     }
 
-    class TextField extends DisplayObject {
-
+    export class TextField extends DisplayObject {
+        text  = "aa";
         render(context: CanvasRenderingContext2D) {
             context.font = "20px Arial";
             context.fillStyle = '#000000';
-            context.fillText('HelloWorld', 0, 20);
+            context.fillText(this.text, 0, 20);
         }
     }
 
