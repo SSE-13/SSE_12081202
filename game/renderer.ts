@@ -1,11 +1,7 @@
 var canvas: HTMLCanvasElement = document.getElementById("game") as HTMLCanvasElement;
 var context = canvas.getContext("2d");
 
-
 module render {
-
-
-
 
 
     /**
@@ -13,7 +9,7 @@ module render {
      */
     export class DisplayObject {
         
-        width = 100
+        width = 100;
         height = 100;
         x = 0;
         y = 0;
@@ -30,6 +26,8 @@ module render {
 
         constructor() {
             this.globalMatrix = new math.Matrix();
+          //  console.log("DisplayObject.constructor()");
+            
         }
 
         getLocalMatrix(): math.Matrix {
@@ -39,7 +37,7 @@ module render {
         }
 
         draw(context: CanvasRenderingContext2D) {
-
+            context.save();
             var parent = this.parent;
             var localMatrix = this.getLocalMatrix();
             if (!parent) {
@@ -50,8 +48,6 @@ module render {
                 // GLOBAL_MATRIX = PARENT_GLOBAL_MATRIX * LOCAL_MATRIX
                 this.globalMatrix = math.matrixAppendMatrix(localMatrix, parent.globalMatrix);
             }
-
-
             context.setTransform(
                 this.globalMatrix.a,
                 this.globalMatrix.b,
@@ -61,6 +57,7 @@ module render {
                 this.globalMatrix.ty
             );
             this.render(context);
+            context.restore();
         }
 
         render(context: CanvasRenderingContext2D) {
@@ -113,8 +110,6 @@ module render {
 
     export class Rect extends DisplayObject {
 
-
-
         color = '#FF0000';
 
         strokeColor = "#000000"
@@ -127,15 +122,16 @@ module render {
             context.closePath();
             context.fill();
             context.stroke();
-        } 
+        }
     }
 
     export class TextField extends DisplayObject {
-        text  = "aa";
+
         render(context: CanvasRenderingContext2D) {
             context.font = "20px Arial";
             context.fillStyle = '#000000';
-            context.fillText(this.text, 0, 20);
+            context.textAlign = "center"
+            context.fillText('HelloWorld', 0, 20,this.width);
         }
     }
 
@@ -206,3 +202,4 @@ module render {
 
     }
 }
+

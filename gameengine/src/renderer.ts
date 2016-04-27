@@ -12,9 +12,27 @@ module render {
      * 基类，负责处理x,y,rotation 等属性
      */
     export class DisplayObject {
-        
-        width = 100
-        height = 100;
+
+        protected _width = 100
+        protected _height = 100;
+
+        public get width(): number {
+            return this._width;
+        }
+
+        public set width(value: number) {
+            this._width = value;
+        }
+
+        public get height(): number {
+            return this._height;
+        }
+
+        public set height(value: number) {
+            this._height = value;
+        }
+
+
         x = 0;
         y = 0;
         scaleX = 1;
@@ -127,15 +145,30 @@ module render {
             context.closePath();
             context.fill();
             context.stroke();
-        } 
+        }
     }
 
     export class TextField extends DisplayObject {
-        text  = "aa";
+
+        public text: string = "";
+
+        /**
+         * 这个"center"|"left"表示这个变量的类型是字符串，并且只允许是 center 或者 left，其他参数都会编译失败
+         */
+        public textAlign: "center" | "left" = "left";
+
+        /**
+         * 字体大小
+         */
+        public fontSize: number = 20;
+
         render(context: CanvasRenderingContext2D) {
-            context.font = "20px Arial";
+            context.font = `${this.fontSize}px Arial`;
             context.fillStyle = '#000000';
-            context.fillText(this.text, 0, 20);
+            context.textAlign = this.textAlign;
+            //实现居中功能
+            var offsetx = this.textAlign == "center" ? this.width / 2 : 0;
+            context.fillText(this.text, offsetx, this.fontSize, this.width);
         }
     }
 
@@ -149,7 +182,7 @@ module render {
             callback();
             return;
         }
-        imageList.forEach(function(imageUrl) {
+        imageList.forEach(function (imageUrl) {
             var image = new Image();
             image.src = imageUrl;
             image.onload = onLoadComplete;
@@ -186,7 +219,7 @@ module render {
             stage.parent = null;
             this.stage = stage;
             var self = this;
-            loadResource(resourceList, function() {
+            loadResource(resourceList, function () {
                 requestAnimationFrame(self.onEnterFrame.bind(self));
             })
 

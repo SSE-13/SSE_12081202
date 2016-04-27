@@ -60,6 +60,21 @@ function onButtonClick(button) {
     writeFlie();
     console.log("click");
 }
+var undobutton = new render.DisplayObjectContainer();
+var button1 = new render.Rect();
+undobutton.addChild(button1);
+button1.x = 300;
+button1.y = 330;
+button1.width = 100;
+button1.height = 50;
+button1.color = '#0080FF';
+var title = new render.TextField();
+undobutton.addChild(title);
+title.text = '撤销';
+title.x = 330;
+title.y = 310;
+undobutton.addChild(button1);
+undobutton.addChild(title);
 var mapData = readFile();
 var renderCore = new render.RenderCore();
 var eventCore = new events.EventCore();
